@@ -2,15 +2,23 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 
-// Cors instellingen
-const corsOptions ={
-    origin:'http://localhost:3000', 
-    credentials:true,
-    optionSuccessStatus:200
-}
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
 
 app.use(express.json());
-app.use(cors(corsOptions));
+
+app.use(express.urlencoded({
+  extended: true
+}));
+
+app.use(cors({
+    origin: ['http://localhost:3000'],
+    methods: ["GET", "POST"],
+    credentials: true
+}));
+
+// Parser
+app.use(cookieParser());
 
 app.get('/', (req, res) => res.send('React & Express project'));
 
