@@ -44,7 +44,7 @@ module.exports = function(express, app){
                         if (response) {
                             req.session.user = result;
                             console.log(req.session.user);
-                            res.send({message: "Ingelogd"});
+                            res.send({message: username});
                         } else {
                             res.send({message: "Het opgegeven wachtwoord is incorrect."});
                         }
