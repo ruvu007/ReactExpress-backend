@@ -7,6 +7,14 @@ module.exports = function(express, app){
     app.post('/register', (req, res) => {
         const username = req.body.username;
         const password = req.body.password;
+        const name = req.body.name;
+        const country = req.body.country;
+        const zip = req.body.zip;
+        const housenumber = req.body.housenumber;
+        const phone = req.body.phone;
+        const kvk = req.body.kvk;
+        const btw = req.body.btw;
+        const bankaccount = req.body.bankaccount;
         const role = req.body.role;
         
         // Het wachtwoord encrypten
@@ -25,8 +33,8 @@ module.exports = function(express, app){
                     } else {
                         // Database query om de gegevens van de gebruiker in de database te zetten
                         db.query(
-                            "INSERT INTO users (username, password, role) VALUES (?,?,?)",
-                            [username, hash, role],
+                            "INSERT INTO users (username, password, role, name, country, zip, housenumber, phone, kvk, btw, bankaccount) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                            [username, hash, role, name, country, zip, housenumber, phone, kvk, btw, bankaccount],
                             (err, result) => {
                                 console.log(err);
                         });  

@@ -11,9 +11,12 @@ module.exports = function(express, app){
             secret: "IqFic484907I0T552hiMQ1UCJimRGL55",
             resave: false,
             saveUninitialized: false,
-            // De tijd tot de cookie vervalt (staat nu op 1 uur)
             cookie: {
-                expires: 60 * 60 * 24,
+                // De tijd tot de cookie vervalt (staat nu op 1 uur)
+                maxAge: 1000 * 60 * 60,
+                sameSite: true,
+                // Nodig indien de site online op https staat
+                // secure: true
             },
         })
     );
