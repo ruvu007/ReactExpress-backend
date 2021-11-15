@@ -47,13 +47,22 @@ module.exports = function(express, app){
                         if (response) {
                             req.session.user = result;
                             console.log(req.session.user);
-                            res.send({message: username});
+                            res.send({
+                                auth: true,
+                                message: username
+                            });
                         } else {
-                            res.send({message: "Het opgegeven wachtwoord is incorrect."});
+                            res.send({
+                                auth: false,
+                                message: "Het opgegeven wachtwoord is incorrect."
+                            });
                         }
                     });
                 } else {
-                    res.send({message: "Het opgegeven emailadres bestaat niet."});
+                    res.send({
+                        auth: false,
+                        message: "Het opgegeven emailadres bestaat niet."
+                    });
                 }
             }
         );
