@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.get('/', (req, res) => res.send('React & Express project'));
 
 // Routes importeren
-require('./routes/login')(express, app);
+require('./routes/auth')(express, app);
 require('./routes/registration')(express, app);
 
 app.listen(3001, function() {

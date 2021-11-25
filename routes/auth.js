@@ -53,19 +53,18 @@ module.exports = function(express, app){
                             req.session.user = result;
                             console.log(req.session.user);
                             res.send({
-                                auth: true,
-                                message: username
+                                loggedIn: true
                             });
                         } else {
                             res.send({
-                                auth: false,
+                                loggedIn: false,
                                 message: "Het opgegeven wachtwoord is incorrect."
                             });
                         }
                     });
                 } else {
                     res.send({
-                        auth: false,
+                        loggedIn: false,
                         message: "Het opgegeven emailadres bestaat niet."
                     });
                 }
@@ -81,7 +80,7 @@ module.exports = function(express, app){
                 loggedIn: false
             });
         } else {
-            console.log("Loguit van " + req.body.id + " ging verkeerd")
+            console.log("Uitlog van " + req.session.user.username + " ging verkeerd")
         }
     });
 };
