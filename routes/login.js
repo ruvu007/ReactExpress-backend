@@ -24,9 +24,14 @@ module.exports = function(express, app){
     // Checkt of de gebruiker nog een geldige cookie heeft
     app.get('/login', (req, res) => {
         if (req.session.user) {
-            res.send({ loggedIn: true, user: req.session.user });
+            res.send({ 
+                loggedIn: true, 
+                user: req.session.user 
+            });
         } else {
-            res.send({ loggedIn: false });
+            res.send({ 
+                loggedIn: false 
+            });
         }
     });
 
@@ -66,5 +71,17 @@ module.exports = function(express, app){
                 }
             }
         );
+    });
+
+    // Uitlog functie
+    app.post('/logout', (req, res) => {
+        if (req.session.user) {
+            req.session.destroy();
+            res.send({
+                loggedIn: false
+            });
+        } else {
+            console.log("Loguit van " + req.body.id + " ging verkeerd")
+        }
     });
 };
