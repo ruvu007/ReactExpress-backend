@@ -37,7 +37,8 @@ module.exports = function(express, app){
                             [username, hash, role, name, country, zip, housenumber, phone, kvk, btw, bankaccount],
                             (err, result) => {
                                 console.log(err);
-                        });  
+                            }
+                        );  
                     };
                 }
             );

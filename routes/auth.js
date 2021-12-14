@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const session = require("express-session");
+const requestIp = require("request-ip");
 
 module.exports = function(express, app){
     const db = require('../database.js');
@@ -26,7 +27,7 @@ module.exports = function(express, app){
         if (req.session.user) {
             res.send({ 
                 loggedIn: true, 
-                user: req.session.user 
+                user: req.session.user
             });
         } else {
             res.send({ 
@@ -40,6 +41,14 @@ module.exports = function(express, app){
         const username = req.body.username;
         const password = req.body.password;
 
+        const ipaddress = requestIp.getClientIp(req);
+
+        const getDate = new Date();
+        const date = getDate.toISOString().slice(0,10);
+        const hours = getDate.getHours();
+        const minutes = getDate.getMinutes();
+        const fullDate = date + " - " + hours + ":" + minutes;
+
         db.query(
             "SELECT * FROM users WHERE username = ?",
             username,
@@ -52,10 +61,23 @@ module.exports = function(express, app){
                         if (response) {
                             req.session.user = result;
                             console.log(req.session.user);
+
+                            // Gebruiker status
+                            db.query(
+                                "UPDATE users SET ipaddress = ?, loggedin = 'yes', date = ?, loginamount = loginamount + 1 WHERE username = ?",
+                                [ipaddress, fullDate, username],
+                                (err, result) => {
+                                    console.log('ingelogd');
+                                }
+                            );
+
+                            // Login succesvol
                             res.send({
                                 loggedIn: true
                             });
+
                         } else {
+                            // Wachtwoord incorrect
                             res.send({
                                 loggedIn: false,
                                 message: "Het opgegeven wachtwoord is incorrect."
@@ -74,13 +96,24 @@ module.exports = function(express, app){
 
     // Uitlog functie
     app.post('/logout', (req, res) => {
+        const username = req.session.user[0].username;
+        console.log(username);
+        
         if (req.session.user) {
+            db.query(
+                "UPDATE users SET loggedin = 'no' WHERE username = ?",
+                [username],
+                (err, result) => {
+                    console.log('uitgelogd');
+                }
+            );
+
             req.session.destroy();
             res.send({
                 loggedIn: false
             });
         } else {
-            console.log("Uitlog van " + req.session.user.username + " ging verkeerd")
+            console.log("Uitlog van " + username + " ging verkeerd")
         }
     });
 };
