@@ -1,9 +1,28 @@
 const bcrypt = require("bcrypt");
 const session = require("express-session");
 const requestIp = require("request-ip");
+var MySQLStore = require('express-mysql-session')(session);
 
 module.exports = function(express, app){
     const db = require('../database.js');
+
+    var options = {
+        host: 'localhost',
+        port: 3306,
+        user: 'root',
+        password: 'Database1!',
+        database: 'linkedvest_ruben',
+        schema: {
+            tableName: 'sessions',
+            columnNames: {
+                session_id: 'session_id',
+                expires: 'expires',
+                data: 'data'
+            }
+        }
+    };
+    
+    var sessionStore = new MySQLStore(options);
 
     // Sessie instellingen
     app.use(
@@ -12,6 +31,7 @@ module.exports = function(express, app){
             secret: "IqFic484907I0T552hiMQ1UCJimRGL55",
             resave: false,
             saveUninitialized: false,
+            store: sessionStore,
             cookie: {
                 // De tijd tot de cookie vervalt (staat nu op 1 uur)
                 maxAge: 1000 * 60 * 60,
