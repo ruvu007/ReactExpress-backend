@@ -25,6 +25,7 @@ app.get('/', (req, res) => res.send('React & Express project'));
 // Routes importeren
 require('./routes/auth')(express, app);
 require('./routes/registration')(express, app);
+require('./routes/employeeAuth')(express, app);
 
 app.listen(3001, function() {
     console.log("Express server running on port 3001")
